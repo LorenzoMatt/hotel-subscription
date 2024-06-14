@@ -42,7 +42,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationExceptions(
         ex: MethodArgumentNotValidException, request: HttpServletRequest
-    ): ResponseEntity<ValidationErrorResponse> {
+    ): ResponseEntity<ErrorResponse> {
         val errors = ex.bindingResult.fieldErrors.map { fieldError ->
             ValidationError(
                 field = fieldError.field,
@@ -51,7 +51,7 @@ class GlobalExceptionHandler {
             )
         }
 
-        val response = ValidationErrorResponse(
+        val response = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.BAD_REQUEST.value(),
             error = "Bad Request",
