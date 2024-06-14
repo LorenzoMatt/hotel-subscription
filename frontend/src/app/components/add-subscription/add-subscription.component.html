@@ -1,0 +1,37 @@
+<h2>Add New Subscription</h2>
+<form [formGroup]="subscriptionForm" (ngSubmit)="onAddSubscription()">
+  <mat-form-field appearance="fill">
+    <mat-label>Hotel ID</mat-label>
+    <input matInput type="number" formControlName="hotelId" min="1">
+    <mat-error *ngIf="subscriptionForm.get('hotelId')?.errors?.['required']">
+      Hotel ID is required.
+    </mat-error>
+    <mat-error *ngIf="subscriptionForm.get('hotelId')?.errors?.['min']">
+      Hotel ID must be greater than {{ subscriptionForm.get('hotelId')?.errors?.['min']?.['min'] }}.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Start Date:</mat-label>
+    <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="startDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="subscriptionForm.get('startDate')?.hasError('required')">
+      Start date is required.
+    </mat-error>
+    <mat-error *ngIf="subscriptionForm.get('startDate')?.hasError('futureDate')">
+      The date must be in the future.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Term:</mat-label>
+    <mat-select formControlName="term">
+      <mat-option value="MONTHLY">Monthly</mat-option>
+      <mat-option value="YEARLY">Yearly</mat-option>
+    </mat-select>
+    <mat-error *ngIf="subscriptionForm.get('term')?.hasError('required')">
+      Subscription term is required.
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="!subscriptionForm.valid">Add Subscription</button>
+</form>
