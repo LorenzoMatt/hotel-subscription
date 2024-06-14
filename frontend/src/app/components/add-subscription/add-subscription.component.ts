@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { SubscriptionRequest } from 'src/app/models/subscription.request.model';
+import { NotificationService } from 'src/app/services/notification.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
 import { futureDateValidator } from 'src/app/validators/future-date.validator';
 
@@ -17,7 +17,7 @@ export class AddSubscriptionComponent {
   constructor(
     private fb: FormBuilder,
     private subscriptionService: SubscriptionService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificationService,
   ) {
     const today = new Date();
     this.minDate = new Date(
@@ -45,22 +45,11 @@ export class AddSubscriptionComponent {
     const newSubscription: SubscriptionRequest = this.subscriptionForm.value;
 
     this.subscriptionService.startSubscription(newSubscription).subscribe({
-      next: (res) => {
-        this.snackBar.open('Subscription added successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
-        });
+      next: (res) => { this.notificationService.showSnackBar('Subscription added successfully!', 'Close',3000, 'success-snackbar');
         this.resetForm();
       },
       error: (err) => {
-        this.snackBar.open(err, 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar'],
-        });
+        this.notificationService.showSnackBar(err, 'Close',3000, 'error-snackbar');
       },
     });
   }

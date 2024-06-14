@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Subscription } from 'src/app/models/subscription.model';
+import { NotificationService } from 'src/app/services/notification.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
@@ -24,8 +25,9 @@ export class SubscriptionListComponent implements OnInit {
 
   constructor(
     private subscriptionService: SubscriptionService,
-    private snackBar: MatSnackBar,
-    private changeDetector: ChangeDetectorRef
+    private notificationService: NotificationService,
+    private changeDetector: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -41,12 +43,7 @@ export class SubscriptionListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Failed to load subscriptions.', error);
-        this.snackBar.open(error, 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar'],
-        });
+        this.notificationService.showSnackBar('Failed to load subscriptions.', 'Close', 3000, 'error-snackbar');
       },
     });
   }
@@ -55,20 +52,10 @@ export class SubscriptionListComponent implements OnInit {
     this.subscriptionService.cancelSubscription(id).subscribe(
       (response) => {
         this.updateDataSource(response, id);
-        this.snackBar.open('Subscription cancelled successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
-        });
+        this.notificationService.showSnackBar('Subscription cancelled successfully!', 'Close', 3000, 'success-snackbar');
       },
       (error) => {
-        this.snackBar.open(error, 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar'],
-        });
+        this.notificationService.showSnackBar('Error cancelling subscription', 'Close', 3000, 'error-snackbar');
         console.error('Error cancelling subscription', error);
       }
     );
@@ -78,20 +65,10 @@ export class SubscriptionListComponent implements OnInit {
     this.subscriptionService.restartSubscription(id).subscribe(
       (response) => {
         this.updateDataSource(response, id);
-        this.snackBar.open('Subscription restarted successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
-        });
+        this.notificationService.showSnackBar('Subscription restarted successfully!', 'Close', 3000, 'success-snackbar');
       },
       (error) => {
-        this.snackBar.open(error, 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar'],
-        });
+        this.notificationService.showSnackBar('Error restarting subscription', 'Close', 3000, 'error-snackbar');
         console.error('Error restarting subscription', error);
       }
     );
