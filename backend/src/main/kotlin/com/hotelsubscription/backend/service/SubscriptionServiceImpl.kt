@@ -44,17 +44,22 @@ class SubscriptionServiceImpl(
     }
 
     override fun restartSubscription(subscriptionId: Long): SubscriptionResponse {
-        val subscription = subscriptionRepository.findById(subscriptionId)
+        val subscriptionToRestart = subscriptionRepository.findById(subscriptionId)
             .orElseThrow { NoSuchElementException("Subscription not found") }
-        if (subscription.status == Status.CANCELED || subscription.status == Status.EXPIRED) {
-            val nextPaymentDate =
-                if (subscription.term == Term.MONTHLY) LocalDate.now().plusMonths(1) else LocalDate.now().plusYears(1)
-            val updatedSubscription =
-                subscription.copy(status = Status.ACTIVE, nextPayment = nextPaymentDate, endDate = null)
-            return subscriptionRepository.save(updatedSubscription).toResponse()
+
+        val activeSubscriptions = subscriptionRepository.findByHotelIdAndStatus(subscriptionToRestart.hotelId, Status.ACTIVE)
+        if (activeSubscriptions.isNotEmpty()) {
+            throw IllegalStateException("Hotel already has an active subscription")
         }
-        throw IllegalStateException("Subscription must be either canceled or expired to be restarted")
+
+        val nextPaymentDate =
+            if (subscriptionToRestart.term == Term.MONTHLY) LocalDate.now().plusMonths(1) else LocalDate.now().plusYears(1)
+        val updatedSubscription =
+            subscriptionToRestart.copy(status = Status.ACTIVE, nextPayment = nextPaymentDate, endDate = null)
+        return subscriptionRepository.save(updatedSubscription).toResponse()
+
     }
+
 
     private fun Subscription.toResponse(): SubscriptionResponse {
         return SubscriptionResponse(

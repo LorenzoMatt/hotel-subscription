@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface SubscriptionRepository : JpaRepository<Subscription, Long> {
     fun findByHotelIdAndStatus(hotelId: Long, status: Status): List<Subscription>
+    fun findByHotelId(hotelId: Long): List<Subscription>
 }
