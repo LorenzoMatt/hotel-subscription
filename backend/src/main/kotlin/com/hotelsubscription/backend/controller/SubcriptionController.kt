@@ -2,6 +2,7 @@ package com.hotelsubscription.backend.controller
 
 import com.hotelsubscription.backend.dto.SubscriptionRequest
 import com.hotelsubscription.backend.dto.SubscriptionResponse
+import com.hotelsubscription.backend.exception.ErrorResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -22,8 +23,10 @@ interface SubscriptionController {
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Subscription created successfully",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = SubscriptionResponse::class))]),
-        ApiResponse(responseCode = "400", description = "Invalid input", content = [Content(mediaType = "application/json")]),
-        ApiResponse(responseCode = "400", description = "Hotel already has an active subscription", content = [Content(mediaType = "application/json")])
+        ApiResponse(responseCode = "400", description = "Invalid input",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "400", description = "Hotel already has an active subscription",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping
     fun startSubscription(@Valid @RequestBody request: SubscriptionRequest): ResponseEntity<SubscriptionResponse>
@@ -32,8 +35,10 @@ interface SubscriptionController {
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Subscription canceled successfully",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = SubscriptionResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Subscription not found", content = [Content(mediaType = "application/json")]),
-        ApiResponse(responseCode = "400", description = "Cannot cancel a non-active subscription", content = [Content(mediaType = "application/json")])
+        ApiResponse(responseCode = "404", description = "Subscription not found",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "400", description = "Cannot cancel a non-active subscription",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping("/{id}/cancel")
     fun cancelSubscription(@PathVariable id: Long): ResponseEntity<SubscriptionResponse>
@@ -41,7 +46,9 @@ interface SubscriptionController {
     @Operation(summary = "Get all existing subscriptions")
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "List of subscriptions retrieved successfully",
-            content = [Content(mediaType = "application/json", schema = Schema(implementation = SubscriptionResponse::class))])
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = SubscriptionResponse::class))]),
+        ApiResponse(responseCode = "500", description = "Internal Server Error",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @GetMapping
     fun getAllSubscriptions(): ResponseEntity<List<SubscriptionResponse>>
@@ -50,8 +57,10 @@ interface SubscriptionController {
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Subscription restarted successfully",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = SubscriptionResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Subscription not found", content = [Content(mediaType = "application/json")]),
-        ApiResponse(responseCode = "400", description = "Only canceled subscriptions can be restarted", content = [Content(mediaType = "application/json")])
+        ApiResponse(responseCode = "404", description = "Subscription not found",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "400", description = "Only canceled subscriptions can be restarted",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping("/{id}/restart")
     fun restartSubscription(@PathVariable id: Long): ResponseEntity<SubscriptionResponse>
