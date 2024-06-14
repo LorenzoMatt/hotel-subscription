@@ -1,0 +1,18 @@
+<div class="content">
+  <h1 class="title">Subscription Details for Hotel ID: {{ subscription?.hotelId }}</h1>
+  <mat-card *ngIf="subscription" class="subscription-card">
+    <mat-card-content>
+      <p><strong>ID:</strong> {{ subscription.id }}</p>
+      <p><strong>Start Date:</strong> {{ subscription.startDate | date }}</p>
+      <p><strong>Next Payment:</strong> {{ subscription.nextPayment | date }}</p>
+      <p><strong>End Date:</strong> {{ subscription.endDate || 'N/A' }}</p>
+      <p><strong>Term:</strong> {{ subscription.term }}</p>
+      <p><strong>Status:</strong> {{ subscription.status }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="restartSubscription()" [disabled]="!canRestart">Restart Subscription</button>
+      <button mat-raised-button color="warn" (click)="cancelSubscription()" [disabled]="!canCancel">Cancel Subscription</button>
+    </mat-card-actions>
+  </mat-card>
+  <a mat-button routerLink="/subscriptions">Back to Subscriptions List</a>
+</div>

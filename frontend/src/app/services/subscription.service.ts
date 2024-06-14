@@ -28,4 +28,8 @@ export class SubscriptionService {
   restartSubscription(id: number): Observable<Subscription> {
     return this.http.post<Subscription>(`${this.apiUrl}/${id}/restart`, {});
   }
+
+  hasActiveSubscription(hotelId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/has-active/${hotelId}`);
+  }
 }

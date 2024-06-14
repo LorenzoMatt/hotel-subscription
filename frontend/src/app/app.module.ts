@@ -2,6 +2,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AddSubscriptionComponent } from './components/add-subscription/add-subscription.component';
+import { SubscriptionDetailsComponent } from './components/subscription-details/subscription-details.component';
 import { SubscriptionListComponent } from './components/subscription-list/subscription-list.component';
 import { HttpConfigInterceptor } from './interceptors/http.interceptor';
 
@@ -25,7 +27,8 @@ import { HttpConfigInterceptor } from './interceptors/http.interceptor';
   declarations: [
     AppComponent,
     SubscriptionListComponent,
-    AddSubscriptionComponent
+    AddSubscriptionComponent,
+    SubscriptionDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { HttpConfigInterceptor } from './interceptors/http.interceptor';
     ReactiveFormsModule,
     MatRippleModule,
     RouterModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCardModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },

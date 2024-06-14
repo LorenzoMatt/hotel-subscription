@@ -25,9 +25,9 @@ export class SubscriptionListComponent implements OnInit {
 
   constructor(
     private subscriptionService: SubscriptionService,
-    private notificationService: NotificationService,
     private changeDetector: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -43,43 +43,13 @@ export class SubscriptionListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Failed to load subscriptions.', error);
-        this.notificationService.showSnackBar('Failed to load subscriptions.', 'Close', 3000, 'error-snackbar');
+        this.notificationService.showError(error);
       },
     });
   }
 
-  cancelSubscription(id: number): void {
-    this.subscriptionService.cancelSubscription(id).subscribe(
-      (response) => {
-        this.updateDataSource(response, id);
-        this.notificationService.showSnackBar('Subscription cancelled successfully!', 'Close', 3000, 'success-snackbar');
-      },
-      (error) => {
-        this.notificationService.showSnackBar('Error cancelling subscription', 'Close', 3000, 'error-snackbar');
-        console.error('Error cancelling subscription', error);
-      }
-    );
-  }
-
-  restartSubscription(id: number): void {
-    this.subscriptionService.restartSubscription(id).subscribe(
-      (response) => {
-        this.updateDataSource(response, id);
-        this.notificationService.showSnackBar('Subscription restarted successfully!', 'Close', 3000, 'success-snackbar');
-      },
-      (error) => {
-        this.notificationService.showSnackBar('Error restarting subscription', 'Close', 3000, 'error-snackbar');
-        console.error('Error restarting subscription', error);
-      }
-    );
-  }
-
-  updateDataSource(response: Subscription, id: number): void {
-    const index = this.dataSource.data.findIndex((sub) => sub.id === id);
-    if (index > -1) {
-      this.dataSource.data[index] = response;
-      this.dataSource.data = [...this.dataSource.data]; // Refresh the dataSource
-    }
+  viewDetails(subscription: Subscription): void {
+    this.router.navigate(['/subscription', subscription.id], { state: { subscription } });
   }
 
   trackById(index: number, item: Subscription): any {
