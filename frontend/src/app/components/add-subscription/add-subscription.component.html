@@ -1,4 +1,5 @@
-<h2>Add New Subscription</h2>
+<div class="content">
+  <h1 class="title">Add New Subscription</h1>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onAddSubscription()">
   <mat-form-field appearance="fill">
     <mat-label>Hotel ID</mat-label>
@@ -35,3 +36,4 @@
 
   <button mat-raised-button color="primary" type="submit" [disabled]="!subscriptionForm.valid">Add Subscription</button>
 </form>
+</div>

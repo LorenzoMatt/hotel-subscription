@@ -15,3 +15,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mat-mdc-snack-bar-button-color: #fff;
   --mdc-snackbar-supporting-text-color: #fff;
 }
+
+.content {
+  margin: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
