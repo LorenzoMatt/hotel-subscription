@@ -35,4 +35,10 @@ class SubscriptionControllerImpl(
         val subscription = subscriptionService.restartSubscription(id)
         return ResponseEntity.ok(subscription)
     }
+
+    override fun hasActiveSubscription(@PathVariable hotelId: Long?): ResponseEntity<Boolean> {
+        val hasActive = subscriptionService.hasActiveSubscription(hotelId)
+        return ResponseEntity.ok(hasActive)
+    }
+
 }

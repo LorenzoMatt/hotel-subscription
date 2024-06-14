@@ -64,4 +64,11 @@ interface SubscriptionController {
     ])
     @PostMapping("/{id}/restart")
     fun restartSubscription(@PathVariable id: Long): ResponseEntity<SubscriptionResponse>
+
+    @Operation(summary = "Check if there is an active subscription for a hotel")
+    @ApiResponses( value = [
+        ApiResponse(responseCode = "200", description = "Successfully retrieved the active subscription status", content = [Content(mediaType = "application/json", schema = Schema(implementation = Boolean::class))])
+    ])
+    @GetMapping("/has-active/{hotelId}")
+    fun hasActiveSubscription(@PathVariable hotelId: Long?): ResponseEntity<Boolean>
 }
