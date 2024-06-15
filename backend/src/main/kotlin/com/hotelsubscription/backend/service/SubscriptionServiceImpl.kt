@@ -68,10 +68,13 @@ class SubscriptionServiceImpl(
         return subscription.toResponse()
     }
 
+    override fun getSubscriptionsByStatus(status: Status): List<SubscriptionResponse> {
+        return subscriptionRepository.findByStatus(status).map { it.toResponse() }
+    }
+
     override fun hasActiveSubscription(hotelId: Long?): Boolean {
         return subscriptionRepository.existsByHotelIdAndStatus(hotelId, Status.ACTIVE)
     }
-
 
     private fun Subscription.toResponse(): SubscriptionResponse {
         return SubscriptionResponse(

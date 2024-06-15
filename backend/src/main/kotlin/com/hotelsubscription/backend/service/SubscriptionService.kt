@@ -1,6 +1,7 @@
 package com.hotelsubscription.backend.service
 
 import com.hotelsubscription.backend.dto.SubscriptionResponse
+import com.hotelsubscription.backend.entity.Status
 import com.hotelsubscription.backend.entity.Term
 import java.time.LocalDate
 
@@ -11,4 +12,5 @@ interface SubscriptionService {
     fun restartSubscription(subscriptionId: Long): SubscriptionResponse
     fun hasActiveSubscription(hotelId: Long?): Boolean
     fun getSubscriptionById(subscriptionId: Long): SubscriptionResponse
+    fun getSubscriptionsByStatus(status: Status): List<SubscriptionResponse>
 }
