@@ -12,4 +12,5 @@ interface SubscriptionRepository : JpaRepository<Subscription, Long> {
     @Query("SELECT COUNT(s) > 0 FROM Subscription s WHERE s.hotelId = :hotelId AND s.status = :status")
     fun existsByHotelIdAndStatus(hotelId: Long?, status: Status?): Boolean
     fun findByStatus(status: Status): List<Subscription>
-}
+    @Query("SELECT s FROM Subscription s WHERE MONTH(s.startDate) = :month")
+    fun findByMonth(month: Int): List<Subscription>}

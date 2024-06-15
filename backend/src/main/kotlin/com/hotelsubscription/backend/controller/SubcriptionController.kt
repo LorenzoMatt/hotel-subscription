@@ -166,7 +166,7 @@ interface SubscriptionController {
         ]
     )
     @GetMapping("/has-active/{hotelId}")
-    fun hasActiveSubscription(@PathVariable hotelId: Long?): ResponseEntity<Boolean>
+    fun hasActiveSubscription(@PathVariable hotelId: Long): ResponseEntity<Boolean>
 
     @Operation(summary = "Retrieve a subscription by ID")
     @ApiResponses(
@@ -223,4 +223,26 @@ interface SubscriptionController {
     @GetMapping("/status")
     fun getSubscriptionsByStatus(@RequestParam status: Status): ResponseEntity<List<SubscriptionResponse>>
 
+    @Operation(summary = "Get subscriptions by start date month")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "List of subscriptions retrieved successfully",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = SubscriptionResponse::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            )
+        ]
+    )
+    @GetMapping("/month")
+    fun getSubscriptionsByMonth(month: Int): ResponseEntity<List<SubscriptionResponse>>
 }

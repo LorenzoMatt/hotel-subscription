@@ -72,6 +72,10 @@ class SubscriptionServiceImpl(
         return subscriptionRepository.findByStatus(status).map { it.toResponse() }
     }
 
+    override fun getSubscriptionsByMonth(month: Int): List<SubscriptionResponse> {
+        return subscriptionRepository.findByMonth(month).map { it.toResponse() }
+    }
+
     override fun hasActiveSubscription(hotelId: Long?): Boolean {
         return subscriptionRepository.existsByHotelIdAndStatus(hotelId, Status.ACTIVE)
     }

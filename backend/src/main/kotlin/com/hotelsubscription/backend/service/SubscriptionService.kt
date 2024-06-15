@@ -13,4 +13,5 @@ interface SubscriptionService {
     fun hasActiveSubscription(hotelId: Long?): Boolean
     fun getSubscriptionById(subscriptionId: Long): SubscriptionResponse
     fun getSubscriptionsByStatus(status: Status): List<SubscriptionResponse>
+    fun getSubscriptionsByMonth(month: Int): List<SubscriptionResponse>
 }

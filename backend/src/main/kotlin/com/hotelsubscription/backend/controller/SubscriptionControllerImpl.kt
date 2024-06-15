@@ -38,7 +38,7 @@ class SubscriptionControllerImpl(
         return ResponseEntity.ok(subscription)
     }
 
-    override fun hasActiveSubscription(@PathVariable hotelId: Long?): ResponseEntity<Boolean> {
+    override fun hasActiveSubscription(@PathVariable hotelId: Long): ResponseEntity<Boolean> {
         val hasActive = subscriptionService.hasActiveSubscription(hotelId)
         return ResponseEntity.ok(hasActive)
     }
@@ -50,6 +50,10 @@ class SubscriptionControllerImpl(
 
     override fun getSubscriptionsByStatus(@RequestParam status: Status): ResponseEntity<List<SubscriptionResponse>> {
         return ResponseEntity.ok(subscriptionService.getSubscriptionsByStatus(status))
+    }
+
+    override fun getSubscriptionsByMonth(@RequestParam month: Int): ResponseEntity<List<SubscriptionResponse>> {
+        return ResponseEntity.ok(subscriptionService.getSubscriptionsByMonth(month))
     }
 
 }
