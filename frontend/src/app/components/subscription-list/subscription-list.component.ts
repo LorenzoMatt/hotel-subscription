@@ -49,7 +49,7 @@ export class SubscriptionListComponent implements OnInit {
   }
 
   viewDetails(subscription: Subscription): void {
-    this.router.navigate(['/subscription', subscription.id], { state: { subscription } });
+    this.router.navigate(['/subscription', subscription.id]);
   }
 
   trackById(index: number, item: Subscription): any {

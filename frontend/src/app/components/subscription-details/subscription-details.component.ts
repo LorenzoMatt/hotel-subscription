@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'src/app/models/subscription.model';
 import { NotificationService } from 'src/app/services/notification.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
@@ -15,19 +15,34 @@ export class SubscriptionDetailsComponent implements OnInit {
   canCancel: boolean = false;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private subscriptionService: SubscriptionService,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.subscription = history.state.subscription;
-    if (this.subscription) {
-      this.checkActiveSubscriptions(this.subscription.hotelId);
-      this.canCancel = this.subscription.status === 'ACTIVE';
+    const subscriptionId = this.route.snapshot.params['id'];
+    if (subscriptionId) {
+      this.loadSubscriptionDetails(subscriptionId);
     } else {
       this.router.navigate(['/subscriptions']);
     }
+  }
+
+  loadSubscriptionDetails(id: number): void {
+    this.subscriptionService.getSubscriptionById(id).subscribe({
+      next: (subscription) => {
+        this.subscription = subscription;
+        this.checkActiveSubscriptions(subscription.hotelId);
+        this.canCancel = subscription.status === 'ACTIVE';
+      },
+      error: (error) => {
+        console.error('Error loading subscription details', error);
+        this.notificationService.showError(error);
+        this.router.navigate(['/subscriptions']);
+      }
+    });
   }
 
   checkActiveSubscriptions(hotelId: number): void {
@@ -37,7 +52,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error checking active subscriptions', error);
-        this.notificationService.showError('Error checking active subscriptions.');
+        this.notificationService.showError(error);
       }
     });
   }
@@ -48,13 +63,12 @@ export class SubscriptionDetailsComponent implements OnInit {
         response => {
           this.notificationService.showSuccess('Subscription restarted successfully!');
           this.subscription = response;
-          this.checkActiveSubscriptions(this.subscription.hotelId);
           this.canCancel = this.subscription.status === 'ACTIVE';
           this.checkActiveSubscriptions(this.subscription.hotelId);
         },
         error => {
-          this.notificationService.showError(error);
           console.error('Error restarting subscription', error);
+          this.notificationService.showError(error);
         }
       );
     }
@@ -70,8 +84,8 @@ export class SubscriptionDetailsComponent implements OnInit {
           this.checkActiveSubscriptions(this.subscription.hotelId);
         },
         error => {
-          this.notificationService.showError(error);
           console.error('Error cancelling subscription', error);
+          this.notificationService.showError(error);
         }
       );
     }

@@ -32,4 +32,8 @@ export class SubscriptionService {
   hasActiveSubscription(hotelId: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/has-active/${hotelId}`);
   }
+
+  getSubscriptionById(id: number): Observable<Subscription> {
+    return this.http.get<Subscription>(`${this.apiUrl}/${id}`, {});
+  }
 }
