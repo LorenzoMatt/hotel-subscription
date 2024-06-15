@@ -45,7 +45,7 @@ class SubscriptionControllerImpl(
         return ResponseEntity.ok(hasActive)
     }
 
-    override fun getSubscriptionById(@PathVariable id: Long): ResponseEntity<SubscriptionResponse>{
+    override fun getSubscriptionById(@PathVariable id: Long): ResponseEntity<SubscriptionResponse> {
         val subscription = subscriptionService.getSubscriptionById(id)
         return ResponseEntity.ok(subscription)
     }
