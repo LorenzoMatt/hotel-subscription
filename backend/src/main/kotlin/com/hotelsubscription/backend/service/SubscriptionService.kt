@@ -10,4 +10,5 @@ interface SubscriptionService {
     fun getAllSubscriptions(): List<SubscriptionResponse>
     fun restartSubscription(subscriptionId: Long): SubscriptionResponse
     fun hasActiveSubscription(hotelId: Long?): Boolean
+    fun getSubscriptionById(subscriptionId: Long): SubscriptionResponse
 }

@@ -60,6 +60,12 @@ class SubscriptionServiceImpl(
 
     }
 
+    override fun getSubscriptionById(subscriptionId: Long): SubscriptionResponse {
+        val subscription = subscriptionRepository.findById(subscriptionId)
+            .orElseThrow { NoSuchElementException("Subscription not found") }
+        return subscription.toResponse()
+    }
+
     override fun hasActiveSubscription(hotelId: Long?): Boolean {
         return subscriptionRepository.existsByHotelIdAndStatus(hotelId, Status.ACTIVE)
     }

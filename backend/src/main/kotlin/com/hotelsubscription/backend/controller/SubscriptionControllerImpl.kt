@@ -2,13 +2,17 @@ package com.hotelsubscription.backend.controller
 
 import com.hotelsubscription.backend.dto.SubscriptionRequest
 import com.hotelsubscription.backend.dto.SubscriptionResponse
+import com.hotelsubscription.backend.exception.ErrorResponse
 import com.hotelsubscription.backend.service.SubscriptionService
 import jakarta.validation.Valid
+import org.springframework.data.jpa.domain.AbstractPersistable_
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDateTime
+
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -39,6 +43,11 @@ class SubscriptionControllerImpl(
     override fun hasActiveSubscription(@PathVariable hotelId: Long?): ResponseEntity<Boolean> {
         val hasActive = subscriptionService.hasActiveSubscription(hotelId)
         return ResponseEntity.ok(hasActive)
+    }
+
+    override fun getSubscriptionById(@PathVariable id: Long): ResponseEntity<SubscriptionResponse>{
+        val subscription = subscriptionService.getSubscriptionById(id)
+        return ResponseEntity.ok(subscription)
     }
 
 }

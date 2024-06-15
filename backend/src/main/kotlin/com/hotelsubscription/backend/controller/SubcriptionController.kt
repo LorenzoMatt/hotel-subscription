@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
+
 @Validated
 interface SubscriptionController {
 
@@ -26,6 +27,8 @@ interface SubscriptionController {
         ApiResponse(responseCode = "400", description = "Invalid input",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
         ApiResponse(responseCode = "400", description = "Hotel already has an active subscription",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "500", description = "Internal Server Error",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping
@@ -38,6 +41,8 @@ interface SubscriptionController {
         ApiResponse(responseCode = "404", description = "Subscription not found",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
         ApiResponse(responseCode = "400", description = "Cannot cancel a non-active subscription",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "500", description = "Internal Server Error",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping("/{id}/cancel")
@@ -60,6 +65,8 @@ interface SubscriptionController {
         ApiResponse(responseCode = "404", description = "Subscription not found",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
         ApiResponse(responseCode = "400", description = "Only canceled subscriptions can be restarted",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "500", description = "Internal Server Error",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping("/{id}/restart")
@@ -67,8 +74,20 @@ interface SubscriptionController {
 
     @Operation(summary = "Check if there is an active subscription for a hotel")
     @ApiResponses( value = [
-        ApiResponse(responseCode = "200", description = "Successfully retrieved the active subscription status", content = [Content(mediaType = "application/json", schema = Schema(implementation = Boolean::class))])
+        ApiResponse(responseCode = "200", description = "Successfully retrieved the active subscription status", content = [Content(mediaType = "application/json", schema = Schema(implementation = Boolean::class))]),
+        ApiResponse(responseCode = "500", description = "Internal Server Error",
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
     ])
     @GetMapping("/has-active/{hotelId}")
     fun hasActiveSubscription(@PathVariable hotelId: Long?): ResponseEntity<Boolean>
+
+    @Operation(summary = "Retrieve a subscription by ID")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "Subscription retrieved successfully", content = [Content(mediaType = "application/json", schema = Schema(implementation = SubscriptionResponse::class))]),
+        ApiResponse(responseCode = "404", description = "Subscription not found", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]),
+        ApiResponse(responseCode = "500", description = "Internal Server Error", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))])
+    ])
+    @GetMapping("/{id}")
+    fun getSubscriptionById(@PathVariable id: Long): ResponseEntity<SubscriptionResponse>
+
 }
