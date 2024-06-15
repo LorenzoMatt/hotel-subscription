@@ -1,10 +1,12 @@
 package com.hotelsubscription.backend.entity
 
 import jakarta.persistence.*
+import org.hibernate.envers.Audited
 import java.time.LocalDate
 
 @Entity
 @Table(name = "subscriptions")
+@Audited
 data class Subscription(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
