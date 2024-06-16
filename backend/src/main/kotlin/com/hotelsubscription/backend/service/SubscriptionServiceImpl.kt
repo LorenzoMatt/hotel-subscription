@@ -6,9 +6,11 @@ import com.hotelsubscription.backend.entity.Subscription
 import com.hotelsubscription.backend.entity.Term
 import com.hotelsubscription.backend.repository.SubscriptionRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
+@Transactional
 class SubscriptionServiceImpl(
     private val subscriptionRepository: SubscriptionRepository
 ) : SubscriptionService {
@@ -39,6 +41,7 @@ class SubscriptionServiceImpl(
         return subscriptionRepository.save(updatedSubscription).toResponse()
     }
 
+    @Transactional(readOnly = true)
     override fun getAllSubscriptions(): List<SubscriptionResponse> {
         return subscriptionRepository.findAll().map { it.toResponse() }
     }
@@ -62,20 +65,24 @@ class SubscriptionServiceImpl(
 
     }
 
+    @Transactional(readOnly = true)
     override fun getSubscriptionById(subscriptionId: Long): SubscriptionResponse {
         val subscription = subscriptionRepository.findById(subscriptionId)
             .orElseThrow { NoSuchElementException("Subscription not found") }
         return subscription.toResponse()
     }
 
+    @Transactional(readOnly = true)
     override fun getSubscriptionsByStatus(status: Status): List<SubscriptionResponse> {
         return subscriptionRepository.findByStatus(status).map { it.toResponse() }
     }
 
+    @Transactional(readOnly = true)
     override fun getSubscriptionsByMonth(month: Int): List<SubscriptionResponse> {
         return subscriptionRepository.findByMonth(month).map { it.toResponse() }
     }
 
+    @Transactional(readOnly = true)
     override fun hasActiveSubscription(hotelId: Long?): Boolean {
         return subscriptionRepository.existsByHotelIdAndStatus(hotelId, Status.ACTIVE)
     }
