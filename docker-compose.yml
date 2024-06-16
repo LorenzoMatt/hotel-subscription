@@ -13,6 +13,11 @@ services:
       - DB_URL
       - PG_USER
       - PG_PASSWORD
+      - LOGGING_LEVEL_CONSOLE
+      - LOGGING_LEVEL_ROOT
+      - LOG_DIRECTORY
+    volumes:
+      - ${LOG_DIRECTORY}:${LOG_DIRECTORY}
     depends_on:
       - db
   db:
