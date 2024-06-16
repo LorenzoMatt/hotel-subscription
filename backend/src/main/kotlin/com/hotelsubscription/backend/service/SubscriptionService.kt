@@ -10,7 +10,7 @@ interface SubscriptionService {
     fun cancelSubscription(subscriptionId: Long): SubscriptionResponse
     fun getAllSubscriptions(): List<SubscriptionResponse>
     fun restartSubscription(subscriptionId: Long): SubscriptionResponse
-    fun hasActiveSubscription(hotelId: Long?): Boolean
+    fun hasActiveSubscription(hotelId: Long): Boolean
     fun getSubscriptionById(subscriptionId: Long): SubscriptionResponse
     fun getSubscriptionsByStatus(status: Status): List<SubscriptionResponse>
     fun getSubscriptionsByMonth(month: Int): List<SubscriptionResponse>

@@ -13,19 +13,18 @@ import java.time.LocalDate
 class SubscriptionBatchProcessor(
     private val subscriptionRepository: SubscriptionRepository
 ) {
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(this::class.java)
-    }
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @Transactional
     @Scheduled(cron = "0 1 0 * * ?") // Runs daily at one minute past midnight
     fun updateExpiredSubscriptions() {
-        try {
-            val today = LocalDate.now()
-            val updatedCount = subscriptionRepository.updateExpiredSubscriptions(today, Status.EXPIRED, Status.ACTIVE)
-            logger.info("$updatedCount subscriptions have been updated to expired.")
-        } catch (e: Exception) {
-            logger.error("Failed to update expired subscriptions", e)
+        logger.info("Starting the process to update expired subscriptions")
+        val today = LocalDate.now()
+        val updatedCount = subscriptionRepository.updateExpiredSubscriptions(today, Status.EXPIRED, Status.ACTIVE)
+        if (updatedCount > 0) {
+            logger.info("Successfully updated {} subscriptions to expired status", updatedCount)
+        } else {
+            logger.info("No subscriptions needed updating today")
         }
     }
 }
