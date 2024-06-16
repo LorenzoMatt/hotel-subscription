@@ -36,4 +36,12 @@ export class SubscriptionService {
   getSubscriptionById(id: number): Observable<Subscription> {
     return this.http.get<Subscription>(`${this.apiUrl}/${id}`, {});
   }
+
+  getSubscriptionsByStatus(status: string): Observable<Subscription[]> {
+    return this.http.get<Subscription[]>(`${this.apiUrl}/status`, { params: { status } });
+  }
+
+  getSubscriptionsByMonth(month: number): Observable<Subscription[]> {
+    return this.http.get<Subscription[]>(`${this.apiUrl}/month`, { params: { month } });
+  }
 }

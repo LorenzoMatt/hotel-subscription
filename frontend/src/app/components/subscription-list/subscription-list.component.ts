@@ -13,13 +13,13 @@ import { SubscriptionService } from 'src/app/services/subscription.service';
 })
 export class SubscriptionListComponent implements OnInit {
   dataSource = new MatTableDataSource<Subscription>([]);
-  displayedColumns: string[] = [
-    'hotelId',
-    'startDate',
-    'nextPayment',
-    'status',
-    'actions',
-  ];
+  displayedColumns: string[] = ['hotelId', 'startDate', 'nextPayment', 'status', 'actions'];
+
+  statusOptions: string[] = ['ACTIVE', 'EXPIRED', 'CANCELED'];
+  monthOptions: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+  selectedStatus: string | null = null;
+  selectedMonth: number | null = null;
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
@@ -42,10 +42,52 @@ export class SubscriptionListComponent implements OnInit {
         this.changeDetector.detectChanges(); // Ensures paginator is updated whenever data changes
       },
       error: (error) => {
-        console.error('Failed to load subscriptions.', error);
+        console.error('Failed to load subscriptions', error);
         this.notificationService.showError(error);
       },
     });
+  }
+
+  onStatusChange(event: any): void {
+    this.selectedMonth = null;
+    if (event.value) {
+      this.subscriptionService.getSubscriptionsByStatus(event.value).subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.changeDetector.detectChanges();
+        },
+        error: (error) => {
+          console.error('Failed to load subscriptions by status', error);
+          this.notificationService.showError(error);
+        },
+      });
+    } else {
+      this.loadSubscriptions();
+    }
+  }
+
+  onMonthChange(event: any): void {
+    this.selectedStatus = null;
+    if (event.value) {
+      this.subscriptionService.getSubscriptionsByMonth(event.value).subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.changeDetector.detectChanges();
+        },
+        error: (error) => {
+          console.error('Failed to load subscriptions by month', error);
+          this.notificationService.showError(error);
+        },
+      });
+    } else {
+      this.loadSubscriptions();
+    }
+  }
+
+  resetFilters(): void {
+    this.selectedStatus = null;
+    this.selectedMonth = null;
+    this.loadSubscriptions();
   }
 
   viewDetails(subscription: Subscription): void {
