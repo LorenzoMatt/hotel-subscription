@@ -22,6 +22,7 @@ services:
       - BACKEND_PORT=${BACKEND_PORT}
       - DEBUG_PORT=${DEBUG_PORT}
       - DB_SCHEMA=${DB_SCHEMA}
+      - SEED_SUBSCRIPTIONS=${SEED_SUBSCRIPTIONS}
     volumes:
       - ${LOG_DIRECTORY}:${LOG_DIRECTORY}
     depends_on:

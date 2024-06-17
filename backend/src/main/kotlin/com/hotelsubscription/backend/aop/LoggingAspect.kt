@@ -15,9 +15,8 @@ class LoggingAspect {
     fun logAroundAllMethods(joinPoint: ProceedingJoinPoint): Any? {
         val methodName = joinPoint.signature.toShortString()
         logger.info("Entering method: {}", methodName)
-        if (logger.isTraceEnabled) {
-            logger.trace("Entering method: {} with arguments: {}", methodName, joinPoint.args)
-        }
+        logger.debug("Entering method: {} with arguments: {}", methodName, joinPoint.args)
+
         val startTime = System.currentTimeMillis()
         try {
             val result = joinPoint.proceed()
